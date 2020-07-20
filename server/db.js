@@ -6,7 +6,7 @@ const dbKeys = {
   password: 'BLUEcat2518',
   host: 'localhost',
   port: 3306,
-  database: 'perntodo',
+  database: 'mernagendatwo',
 }
 
 const pool = mysql.createPool(dbKeys)

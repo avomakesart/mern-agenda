@@ -10,65 +10,162 @@ app.use(express.json())
 // Routes
 
 // create todo
-app.post('/todos', async (req, res) => {
+app.post('/customers', async (req, res) => {
   try {
-    const { description } = req.body
-    const newTodo = await pool.query(
-      'INSERT INTO todo (description) VALUES (?)',
-      [description]
+    const {
+      customer_name,
+      customer_lastname,
+      customer_email,
+      customer_phone,
+      date_registered,
+      time_registered,
+      customer_schedule,
+      comments,
+    } = req.body
+
+    const customerValues = [
+      customer_name,
+      customer_lastname,
+      customer_email,
+      customer_phone,
+      date_registered,
+      time_registered,
+      customer_schedule,
+      comments,
+    ]
+
+    const newCustomer = await pool.query(
+      'INSERT INTO customers (customer_name, customer_lastname, customer_email, customer_phone, date_registered, time_registered, customer_schedule, comments) VALUES (?)',
+      [customerValues]
     )
 
-    res.json(newTodo)
+    res.json(newCustomer)
   } catch (err) {
     console.log(err.message)
   }
 })
 
 // get all todo
-app.get('/todos', async (req, res) => {
+app.get('/customers', async (req, res) => {
   try {
-    const allTodos = await pool.query('SELECT * FROM todo')
-    res.json(allTodos)
+    const newCustomer = await pool.query('SELECT * FROM customers')
+    res.json(newCustomer)
   } catch (err) {
     console.log(err.message)
   }
 })
 
 // get a todo
-app.get('/todos/:id', async (req, res) => {
+app.get('/customers/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const todo = await pool.query('SELECT * FROM todo WHERE todo_id = ?', [id])
+    const customer = await pool.query(
+      'SELECT * FROM customers WHERE customer_id = ?',
+      [id]
+    )
 
-    res.json(todo.rows[0])
+    res.json(customer)
   } catch (err) {
     console.log(err.message)
   }
 })
 
 // update a todo
-app.put('/todos/:id', async (req, res) => {
+app.put('/customers/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const { description } = req.body
-    const updateTodo = await pool.query(
-      'UPDATE todo SET description = ? WHERE todo_id = ?',
-      [description, id]
+    const {
+      customer_name,
+      customer_lastname,
+      customer_email,
+      customer_phone,
+      date_registered,
+      time_registered,
+      customer_schedule,
+      comments,
+    } = req.body
+
+    let nameSql = 'UPDATE customers SET customer_name = ? WHERE customer_id = ?'
+
+    let lastnameSql =
+      'UPDATE customers SET  customer_lastname = ? WHERE customer_id = ?'
+
+    let emailSql =
+      'UPDATE customers SET  customer_email = ? WHERE customer_id = ?'
+
+    let phoneSql =
+      'UPDATE customers SET  customer_phone = ? WHERE customer_id = ?'
+
+    let dateSql =
+      'UPDATE customers SET date_registered = ? WHERE customer_id = ?'
+
+    let timeSql =
+      'UPDATE customers SET time_registered = ? WHERE customer_id = ?'
+
+    let scheduleSql =
+      'UPDATE customers SET customer_schedule = ? WHERE customer_id = ?'
+
+    let commentSql = 'UPDATE customers SET comments = ? WHERE customer_id = ?'
+
+    await pool.query(
+      nameSql,
+
+      [customer_name, id]
     )
 
-    res.json('Todo was updated')
+    await pool.query(
+      lastnameSql,
+
+      [customer_lastname, id]
+    )
+
+    await pool.query(
+      emailSql,
+
+      [customer_email, id]
+    )
+
+    await pool.query(
+      phoneSql,
+
+      [customer_phone, id]
+    )
+
+    await pool.query(
+      dateSql,
+
+      [date_registered, id]
+    )
+
+    await pool.query(
+      timeSql,
+
+      [time_registered, id]
+    )
+
+    await pool.query(
+      scheduleSql,
+
+      [customer_schedule, id]
+    )
+
+    await pool.query(
+      commentSql,
+
+      [comments, id]
+    )
+
+    res.json('Customer was updated')
   } catch (err) {
     console.log(err.message)
   }
 })
 
 // delete a todo
-app.delete('/todos/:id', async (req, res) => {
+app.delete('/customers/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const deleteTodo = await pool.query('DELETE FROM todo WHERE todo_id = ?', [
-      id,
-    ])
+    await pool.query('DELETE FROM customers WHERE customer_id = ?', [id])
     res.json('Todo was deleted')
   } catch (err) {
     console.log(err.message)
