@@ -1,3 +1,3 @@
-# mern-todo
-Another todo app but using MERN (MYSQL, EXPRES, REACT AND NODE)
+# mern-agenda
+Fullstack agenda (MYSQL, EXPRES, REACT AND NODE)
 
